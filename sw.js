@@ -1,5 +1,5 @@
 'use strict';
-const CACHE='osc-launcher-v8.7.0';
+const CACHE='osc-launcher-v8.7.1';
 const ASSETS=['./','./index.html','./style.css','./config.js','./app.js','./manifest.webmanifest','./icons/icon-32.png','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./icons/favicon.ico'];
 const ALLOWED=new Set(ASSETS.map(path=>new URL(path,self.registration.scope).href));
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
