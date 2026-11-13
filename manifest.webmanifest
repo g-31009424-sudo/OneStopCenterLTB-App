@@ -1,0 +1,17 @@
+{
+  "id":"./",
+  "name":"One Stop Center SJKC Li Tek B",
+  "short_name":"OSC Li Tek B",
+  "description":"Pintasan guru ke kehadiran, kokurikulum dan laporan sekolah.",
+  "lang":"ms-MY",
+  "start_url":"./?source=homescreen",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f8f9fc",
+  "theme_color":"#072b8e",
+  "icons":[
+    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"}
+  ],
+  "categories":["education","productivity"]
+}
