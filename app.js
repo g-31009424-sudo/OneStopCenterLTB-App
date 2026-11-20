@@ -29,7 +29,9 @@ byId('openApp').addEventListener('click',event=>{
 try{
   const url=new URL(window.OSC_CONFIG.webAppUrl);
   if(url.protocol!=='https:'||url.hostname!=='script.google.com'||!url.pathname.endsWith('/exec'))throw Error('Pautan aplikasi tidak sah.');
-  byId('openApp').href=url.href;
+  const chooser=new URL('https://accounts.google.com/AccountChooser');
+  chooser.searchParams.set('continue',url.href);
+  byId('openApp').href=chooser.href;
 }catch(e){byId('openApp').removeAttribute('href');announce('Pautan aplikasi belum dikonfigurasi. Hubungi pentadbir.');}
 window.addEventListener('online',updateConnection);window.addEventListener('offline',updateConnection);updateConnection();
 if(window.matchMedia('(display-mode: standalone)').matches||navigator.standalone){byId('installApp').textContent='Panduan pintasan';}
