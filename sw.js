@@ -1,8 +1,10 @@
 'use strict';
-const CACHE='osc-launcher-v8.8.0';
-const ASSETS=['./','./index.html','./style.css','./config.js','./app.js','./manifest.webmanifest','./icons/icon-32.png','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./icons/favicon.ico'];
+const VERSION='9.1.0';
+const CACHE='osc-launcher-v'+VERSION;
+const VERSIONED=['./style.css','./app.js','./manifest.webmanifest','./icons/icon-32.png','./icons/icon-48.png','./icons/icon-180.png','./icons/icon-192.png','./icons/icon-512.png','./icons/favicon.ico'];
+const ASSETS=['./','./index.html','./config.js',...VERSIONED.map(path=>path+'?v='+VERSION)];
 const ALLOWED=new Set(ASSETS.map(path=>new URL(path,self.registration.scope).href));
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS))));
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(path=>new Request(new URL(path,self.registration.scope),{cache:'reload'}))))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('osc-launcher-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('fetch',event=>{
@@ -10,7 +12,7 @@ self.addEventListener('fetch',event=>{
   // Never intercept or cache Apps Script, Drive, Google login, API calls or posts.
   if(request.method!=='GET'||url.origin!==self.location.origin)return;
   if(request.mode==='navigate'&&url.pathname.startsWith(new URL(self.registration.scope).pathname)){
-    event.respondWith(fetch(request).catch(()=>caches.match(new URL('./index.html',self.registration.scope).href)));return;
+    event.respondWith(fetch(request,{cache:'no-cache'}).catch(()=>caches.match(new URL('./index.html',self.registration.scope).href)));return;
   }
   if(!ALLOWED.has(url.href))return;
   event.respondWith(fetch(request).then(response=>{
